@@ -13,7 +13,7 @@ import { prism_build_plan } from "./tools/build-plan.js";
 import { prism_build_apply } from "./tools/build-apply.js";
 import { prism_build_verify } from "./tools/build-verify.js";
 
-const root = process.cwd();
+const root = process.env.PRISM_ROOT || process.cwd();
 const ctx = { root };
 
 export function createServer(): McpServer {
@@ -63,6 +63,7 @@ export function createServer(): McpServer {
     {
       description: "Traces a symbol or path end-to-end through the codebase.",
       inputSchema: z.object({
+        root: z.string().optional().describe("Repository root path"),
         fileOrSymbol: z.string().optional().describe("File path or symbol to trace"),
         depth: z.number().optional().describe("Max depth"),
       }),
@@ -74,7 +75,10 @@ export function createServer(): McpServer {
     "prism_viz_dependencies",
     {
       description: "Shows import/export graph for a given file or module.",
-      inputSchema: z.object({ file: z.string().optional().describe("File path") }),
+      inputSchema: z.object({
+        root: z.string().optional().describe("Repository root path"),
+        file: z.string().optional().describe("File path"),
+      }),
     },
     (args) => prism_viz_dependencies(args as Record<string, unknown>, ctx)
   );
@@ -102,6 +106,7 @@ export function createServer(): McpServer {
     {
       description: "Given a task description, produces bounded context slice.",
       inputSchema: z.object({
+        root: z.string().optional().describe("Repository root path"),
         task: z.string().describe("Task description"),
         agentName: z.string().optional(),
         maxFiles: z.number().optional(),

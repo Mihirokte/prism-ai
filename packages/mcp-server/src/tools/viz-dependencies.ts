@@ -3,8 +3,8 @@ import { loadGtr, gtrHash, PRISM_VERSION } from "../lib/gtr.js";
 import type { ToolCallback } from "../types.js";
 
 export const prism_viz_dependencies: ToolCallback = async (args, { root }) => {
-  const { file } = args as { file?: string };
-  const rootPath = root;
+  const { root: rootArg, file } = args as { root?: string; file?: string };
+  const rootPath = rootArg ?? root;
   const start = Date.now();
   const gtr = await loadGtr(rootPath);
   if (!gtr) {

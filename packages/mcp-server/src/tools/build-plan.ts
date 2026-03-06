@@ -3,21 +3,23 @@ import { loadGtr, gtrHash, PRISM_VERSION } from "../lib/gtr.js";
 import type { ToolCallback } from "../types.js";
 
 export const prism_build_plan: ToolCallback = async (args, { root }) => {
-  const { task, agentName, maxFiles, directRefs } = args as {
+  const { root: rootArg, task, agentName, maxFiles, directRefs } = args as {
+    root?: string;
     task?: string;
     agentName?: string;
     maxFiles?: number;
     directRefs?: string[];
   };
   const start = Date.now();
-  const gtr = await loadGtr(root);
+  const rootPath = rootArg ?? root;
+  const gtr = await loadGtr(rootPath);
   if (!gtr) {
     return {
       content: [{ type: "text" as const, text: JSON.stringify({ ok: false, error: { code: "GTR_NOT_FOUND", message: "Run prism_init first." }, metadata: { tool: "prism_build_plan", duration_ms: Date.now() - start } }) }],
       isError: true,
     };
   }
-  const context = await buildBoundedContext(root, gtr, task ?? "", {
+  const context = await buildBoundedContext(rootPath, gtr, task ?? "", {
     agentName,
     maxFiles,
     directRefs,
