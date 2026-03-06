@@ -1,0 +1,29 @@
+---
+description: PRISM monorepo structure and conventions
+alwaysApply: true
+---
+
+# PRISM Monorepo
+
+This is the PRISM (Project Repository Intelligence, Synthesis & Mapping) monorepo: zero-hallucination MCP server and agent skill.
+
+## Structure
+
+- **packages/core** — GTR builder, tree-sitter parser, graph, validator, context budgeter. No LLM deps.
+- **packages/mcp-server** — MCP server with 11 tools (VIZ, BUILD, system). Depends on core.
+- **packages/cli** — Standalone CLI (stub). Depends on core + mcp.
+- **packages/vscode** — VS Code extension (stub). Depends on core + mcp.
+
+## Conventions
+
+- **TypeScript**: strict mode, `noUncheckedIndexedAccess`, ESM only (`"type": "module"`), Node 22+.
+- **Imports**: use `.js` extension in relative imports (e.g. `from "./foo.js"`).
+- **I/O**: validate with Zod at boundaries; atomic file writes (write to `.tmp` then rename).
+- **State**: no global singletons; state via GTR and session objects.
+- **Banned**: any LLM SDK (anthropic, openai, @google/generative-ai).
+
+## Commands
+
+- `pnpm run build` — build all packages (Turbo)
+- `pnpm run test` — run tests (core has Vitest tests)
+- From repo root, MCP server runs via `packages/mcp-server/dist/cli.js` (stdio).

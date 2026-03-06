@@ -1,0 +1,19 @@
+---
+description: @prism-ai/cli package — standalone CLI
+globs: packages/cli/**/*.ts
+alwaysApply: false
+---
+
+# packages/cli (@prism-ai/cli)
+
+Standalone CLI (npx prism). Currently a stub; Phase 3 will add viz, build, init, status, refresh commands and TUI.
+
+## Layout
+
+- **src/index.ts** — CLI entrypoint (bin: prism). Delegates to core/mcp for init, status, viz, build.
+
+## Rules
+
+- Use @prism-ai/core and @prism-ai/mcp for all behavior; no duplicate GTR or MCP logic.
+- Commands: init (build GTR), status, refresh, viz (--trace, --export mermaid|html), build analyze|plan|"task".
+- Keep CLI thin; parsing with a small CLI framework (e.g. yargs or minimist) is fine when implementing.

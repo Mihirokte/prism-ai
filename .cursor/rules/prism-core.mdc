@@ -1,0 +1,25 @@
+---
+description: @prism-ai/core package — GTR, parser, graph, validator
+globs: packages/core/**/*.ts
+alwaysApply: false
+---
+
+# packages/core (@prism-ai/core)
+
+Core library: Ground Truth Registry (GTR), AST parsing, dependency graph, symbol validation, context budgeting.
+
+## Layout
+
+- **schemas/** — Zod schemas only (GTR, symbols, validation, response envelope). Single source of truth for types.
+- **parser/** — web-tree-sitter init and symbol extraction (JS/TS/Python). Requires WASM grammars for full symbols.
+- **gtr/** — walker (gitignore-aware), xxhash hasher, builder, atomic writer, refresh, query helpers.
+- **graph/** — graphology DirectedGraph, cycle detection, dead code, trace, Mermaid/JSON export.
+- **validator/** — validateOutput(output, gtr), symbol/package extraction, fuzzy suggestions, confidence block.
+- **context/** — token budgets per agent, buildBoundedContext (priority fill).
+
+## Rules
+
+- Do not add LLM or API SDK dependencies. Parser uses web-tree-sitter (WASM).
+- GTR file writes must be atomic (writer.writeJsonAtomic).
+- Export new public API from `src/index.ts` only.
+- Tests live in `tests/` with fixtures in `tests/fixtures/`. Use Vitest.

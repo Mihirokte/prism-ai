@@ -1,0 +1,18 @@
+---
+description: @prism-ai/vscode package — VS Code extension
+globs: packages/vscode/**/*.ts
+alwaysApply: false
+---
+
+# packages/vscode (@prism-ai/vscode)
+
+VS Code extension. Currently a stub; Phase 5 adds Activity Bar panel, WebviewPanel (D3 graph), TreeDataProvider, MCP host on localhost:7474.
+
+## Layout
+
+- **src/extension.ts** — activate/deactivate. Will register commands (prism.vizOverview, prism.traceSymbol, prism.buildFromSelection), panels, and MCP server.
+
+## Rules
+
+- Use @prism-ai/core and @prism-ai/mcp. Extension hosts or connects to MCP; no duplicate GTR logic.
+- Dependencies: @types/vscode, no LLM SDKs. Follow VS Code extension API and activation events for performance.

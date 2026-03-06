@@ -1,0 +1,22 @@
+---
+description: @prism-ai/mcp package — MCP server and tool handlers
+globs: packages/mcp-server/**/*.ts
+alwaysApply: false
+---
+
+# packages/mcp-server (@prism-ai/mcp)
+
+MCP server exposing 11 tools; depends on @prism-ai/core.
+
+## Layout
+
+- **server.ts** — McpServer creation, tool registration (prism_init, prism_status, prism_refresh, prism_viz_*, prism_build_*), stdio transport.
+- **tools/** — one file per tool; each returns `{ content: [{ type: "text", text: JSON.stringify(...) }], isError? }`.
+- **lib/gtr.ts** — loadGtr(root), getGtrPath, gtrHash. Used by all tools.
+- **agent/** — session dirs, spawnAgent (subprocess), retry protocol (buildCorrectionPrompt, shouldRetry).
+
+## Rules
+
+- Tool handlers receive `(args, { root })`; root is process.cwd(). All tools use loadGtr(root) and return PrismResponse-shaped JSON in content[0].text.
+- Do not call any LLM API. Spawn uses subprocess only.
+- Register new tools in server.ts with z.object inputSchema and a handler in tools/.
