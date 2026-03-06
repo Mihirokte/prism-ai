@@ -2,6 +2,11 @@
   "name": "@prism-ai/vscode",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
+  "publisher": "prism-ai",
+  "displayName": "PRISM",
+  "description": "PRISM VIZ: interactive repository graphs (local, deterministic).",
+  "categories": ["Other"],
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -12,12 +17,28 @@
   },
   "dependencies": {
     "@prism-ai/core": "workspace:*",
-    "@prism-ai/mcp": "workspace:*"
+    "@prism-ai/mcp": "workspace:*",
+    "vis-network": "^9.1.10"
   },
   "devDependencies": {
     "@types/vscode": "^1.85.0",
+    "@types/node": "^22.0.0",
     "typescript": "~5.5.0"
   },
-  "activationEvents": [],
-  "contributes": {}
+  "activationEvents": [
+    "onCommand:prism.vizOverview",
+    "onCommand:prism.vizDependencies"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "prism.vizOverview",
+        "title": "PRISM: VIZ Overview"
+      },
+      {
+        "command": "prism.vizDependencies",
+        "title": "PRISM: VIZ Dependencies (Current File)"
+      }
+    ]
+  }
 }

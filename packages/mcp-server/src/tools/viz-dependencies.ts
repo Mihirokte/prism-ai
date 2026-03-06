@@ -1,4 +1,4 @@
-import { buildGraphFromGtr, toMermaid, getImports, getExports } from "@prism-ai/core";
+import { buildGraphFromGtr, getImports, getExports } from "@prism-ai/core";
 import { loadGtr, gtrHash, PRISM_VERSION } from "../lib/gtr.js";
 import type { ToolCallback } from "../types.js";
 
@@ -13,9 +13,7 @@ export const prism_viz_dependencies: ToolCallback = async (args, { root }) => {
       isError: true,
     };
   }
-  const graph = buildGraphFromGtr(gtr);
-  const subgraph = file ? (graph.hasNode(file) ? graph : graph) : graph;
-  const mermaid = toMermaid(subgraph);
+  buildGraphFromGtr(gtr);
   const imports = file ? getImports(gtr, file) : [];
   const exports = file ? getExports(gtr, file) : [];
   const duration_ms = Date.now() - start;
@@ -25,7 +23,11 @@ export const prism_viz_dependencies: ToolCallback = async (args, { root }) => {
         type: "text" as const,
         text: JSON.stringify({
           ok: true,
-          data: { mermaid, imports, exports },
+          data: {
+            imports,
+            exports,
+            suggestion: "Run command: PRISM: VIZ Dependencies (Current File)",
+          },
           metadata: { tool: "prism_viz_dependencies", duration_ms, gtr_hash: gtrHash(gtr), prism_version: PRISM_VERSION },
         }),
       },
