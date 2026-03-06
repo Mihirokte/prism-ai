@@ -1,6 +1,7 @@
 .prism/
 node_modules/
 dist/
+.turbo/
 *.tmp
 *.log
 .DS_Store
